@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shenyue.exercise.dao.EmpMapper">
+    <resultMap id="resultMap" type="com.shenyue.exercise.entity.EDInfo">
+        <id property="eid" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="gender" column="gender"/>
+        <result property="age" column="age"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="did" column="d_id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="num" column="num"/>
+    </resultMap>
+    <!--emp表添加用户-->
+    <insert id="insertEmp" parameterType="com.shenyue.exercise.entity.Emp">
+        INSERT INTO emp(
+        username,password,gender,age,
+        phone,email,d_id)
+        VALUES (
+        #{username},#{password},#{gender},#{age},
+        #{phone},#{email},#{did}
+        )
+    </insert>
+    <!--增加部门人数-->
+    <update id="UpdateAddDepNum" parameterType="int">
+        UPDATE dep SET num=num+1 WHERE id=#{id}
+    </update>
+    <!--减少部门人数-->
+    <update id="UpdateReduceDepNum" parameterType="int">
+        UPDATE dep SET num=num-1 WHERE id=#{id}
+    </update>
+
+    <!--查询emp用户信息-->
+    <select id="selectEmp" resultType="com.shenyue.exercise.entity.Emp">
+        SELECT id eid,username,password,gender,age,
+        phone,email,d_id did FROM emp
+    </select>
+
+    <!--查询用户全部信息-->
+    <select id="selectAll" resultMap="resultMap">
+        SELECT e.id,e.username,e.password,e.gender,e.age,
+        e.phone,e.email,e.d_id,d.name,d.address,d.num FROM emp e JOIN dep d ON e.d_id=d.id
+    </select>
+
+    <!--查询用户所属部门-->
+    <select id="selectEd" resultMap="resultMap">
+        SELECT e.username,d.name FROM emp e JOIN dep d ON e.d_id=d.id
+    </select>
+
+    <!--根据id查询用户部门id-->
+    <select id="selectById" resultType="int">
+        SELECT d_id FROM emp WHERE id=#{id}
+    </select>
+
+    <!--根据id删除用户-->
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM emp WHERE id=#{id}
+    </delete>
+</mapper>
